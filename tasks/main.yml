@@ -1,0 +1,9 @@
+---
+
+- name: Install new relic php agent
+  import_tasks: install.yml
+  when: new_relic_php_agent.state|default(latest) != absent
+
+- name: Uninstall new relic php agent
+  import_tasks: uninstall.yml
+  when: new_relic_php_agent.state|default(latest) == absent

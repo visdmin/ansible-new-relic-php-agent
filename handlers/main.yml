@@ -1,0 +1,35 @@
+---
+# handlers file for ansible-new-relic-php-agent
+
+- name: restart php-fpm
+  systemd:
+    state: restarted
+    daemon_reload: true
+    enabled: true
+    name: "{{ item.php_fpm_service_name }}"
+  when: item.php_fpm_service_name|default(false) != false
+  loop: "{{ php_installations }}"
+
+- name: restart web-server
+  systemd:
+    state: restarted
+    daemon_reload: true
+    enabled: true
+    name: "{{ item.web_server_service_name }}"
+  when: item.web_server_service_name|default(false) != false
+  loop: "{{ php_installations }}"
+
+- name: restart new relic php agent
+  systemd:
+    state: restarted
+    daemon_reload: true
+    enabled: true
+    name: "{{ php_agent_service_name }}"
+  when: enable_agent_service|default(true) != false
+
+- name: stop new relic php agent
+  systemd:
+    state: stopped
+    enabled: false
+    name: "{{ php_agent_service_name }}"
+  when: enable_agent_service|default(true) != true

@@ -1,0 +1,62 @@
+---
+
+- name: Check that license keys have been defined
+  fail:
+    msg: "'license' has to be defined for each php setup, for help visit: https://docs.newrelic.com/docs/apis/intro-apis/new-relic-api-keys/#ingest-license-key"
+  when: item.license | default(False) == False
+  loop: "{{ php_installations }}"
+
+- name: Check that application names have been defined
+  fail:
+    msg: "'appname' has to be defined for each php setup, for help visit: https://docs.newrelic.com/docs/agents/php-agent/configuration/name-your-php-application/"
+  when: item.appname | default(False) == False
+  loop: "{{ php_installations }}"
+
+- name: Check that php installation bin paths have been defined
+  fail:
+    msg: "'php_path' has to be defined for each php setup, for help visit: https://github.com/visdmin/ansible-new-relic-php-agent/blob/main/README.md"
+  when: item.bin_path | default(False) == False
+  loop: "{{ php_installations }}"
+
+- name: Check that php installation config paths have been defined
+  fail:
+    msg: "'config_path' has to be defined for each php setup, for help visit: https://github.com/visdmin/ansible-new-relic-php-agent/blob/main/README.md"
+  when: item.config_path | default(False) == False
+  loop: "{{ php_installations }}"
+
+- name: Install new relic yum repositories
+  yum_repository:
+    name: "{{ new_relic_repository.name }}"
+    enabled: "{{ new_relic_repository.enabled }}"
+    description: "{{ new_relic_repository.desc }}"
+    baseurl: "{{ new_relic_repository.baseurl }}"
+    gpgcheck: "{{ new_relic_repository.gpgcheck }}"
+    repo_gpgcheck: "{{ new_relic_repository.repo_gpgcheck }}"
+    gpgkey: "{{ new_relic_repository.gpgkey }}"
+
+- name: Install new relic php agent package
+  yum:
+    name: "{{ php_agent_package_name }}"
+    state: "{{ state|default(latest) }}"
+    update_cache: true
+  register: php_agent_installed
+
+- name: Run new relic php agent install
+    shell: "NR_INSTALL_PATH={{ item.bin_path }}; newrelic-install install"
+  loop: "{{ php_installations }}"
+  when: php_agent_installed.changed
+
+- name: Setup new relic php.ini files
+  var:
+    config: "{{ item }}"
+  template:
+    src: newrelic.php.ini.j2
+    dest: "{{ item.config_path }}/newrelic.ini"
+    group: root
+    owner: root
+    mode: 0640
+  loop: "{{ php_installations }}"
+  notify:
+    - restart new relic php agent
+    - restart php-fpm
+    - restart web-server

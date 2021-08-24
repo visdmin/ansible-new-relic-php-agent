@@ -1,0 +1,14 @@
+---
+
+php_agent_package_name: newrelic-php5
+php_agent_service_name: newrelic-daemon
+php_ini_filename: newrelic.ini
+
+new_relic_repository:
+  name: newrelic
+  enabled: true
+  desc: New Relic packages for Enterprise Linux 5 - set by ansible
+  baseurl: http://yum.newrelic.com/pub/newrelic/el5/$basearch
+  gpgcheck: true
+  gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-NewRelic
+  repo_gpgcheck: false

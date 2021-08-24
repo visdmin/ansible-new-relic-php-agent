@@ -1,0 +1,29 @@
+---
+
+- name: Check that php installation paths have been defined
+  fail:
+    msg: "'php_path' has to be defined for each php setup, for help visit: https://github.com/visdmin/ansible-new-relic-php-agent/blob/main/README.md"
+  when: item.php_path | default(False) == False
+  loop: "{{ php_installations }}"
+
+- name: Uninstall new relic php.ini files
+  template:
+    state: absent
+    src: newrelic.php.ini.j2
+    dest: "{{ php_d_path }}/{{ php_ini_filename }}"
+
+- name: Uninstall new relic php agent package
+  yum:
+    name: "{{ php_agent_package_name }}"
+    state: absent
+
+- name: Check if new relic yum repository is installed
+  stat:
+    path: "/etc/yum.repos.d/{{ new_relic_repository.name }}.repo"
+    register: newrelic_repository_exists
+
+- name: Uninstall new relic yum repository
+  yum_repository:
+    name: "{{ new_relic_repository.name }}"
+    state: absent
+  when: newrelic_repository_exists
