@@ -1,4 +1,4 @@
-## ansible-new-relic-php-agent
+# ansible-new-relic-php-agent
 
 
 Ansible role for installing new relic php agent on CentOS 7.
@@ -9,25 +9,40 @@ Ansible role for installing new relic php agent on CentOS 7.
 This role is still in early states of development, so issues are very possible.
 Comments and pull reqeusts are welcome !
 
-Requirements
-------------
+## Requirements
+
 
 - Role currenlty only has support for `Centos 7`.
 - Working php installation
 
-Role Variables
---------------
-`php_installations:` **[required]** List of php installations
+## Role Variables
+
+#### [required] `php_installations:` list of `php` installations:
+```yaml
+# List of php installations (required)
+php_installations:
+  # php installation #1
+  - appname: "my app"                         # Aplication name                (required)
+    license: "123123810923789018283"          # New relic license key          (required)
+    bin_path: "/opt/remi/php74/root/bin/"     # Path to the `php` executable   (required)
+    config_path: "/etc/opt/remi/php74/php.d/" # Path to `php` config directory (required)
+  
+  # php installation #2
+  - appname: "another app"
+    license: "adaw213131321"
+    #...
+  # php installation #n
+```
 
 
-#### [required] fields for `php_installations` list item:
+#### Required fields for `php_installation`:
   - `appname`: application name: [help: name-your-php-application](https://docs.newrelic.com/docs/agents/php-agent/configuration/name-your-php-application/)
   - `license`: new relic license key: [help: new-relic-api-keys/#ingest-license-key](https://docs.newrelic.com/docs/apis/intro-apis/new-relic-api-keys/#ingest-license-key)
   - `bin_path`: directory that contains the `php` executable
   - `config_path`: direcotry where `php` configuration is located (`php.d/`)
 
-#### [optional] fields for `php_installations` list item:
-  - `php_fpm_service_name:` php-fpm service name to be restarted when php configuration changes are done.
+#### Optional fields for `php_installation`:
+  - `php_fpm_service_name`: php-fpm service name to be restarted when php configuration changes are done.
   - `web_server_service_name`: web-server service name to be restarted when php configuration changes are done.
   - `ini`: newrelic.ini configuration variables
 
@@ -36,7 +51,7 @@ Role Variables
   - **Changing the .ini values could cause security flaws with the installation !**
   - Help with indivial variabled: https://docs.newrelic.com/docs/agents/php-agent/configuration/php-agent-configuration/
  
-example:
+Variable example:
 ```yaml
 php_installations:
   - appname: My php 7.4 installation 1
@@ -74,10 +89,9 @@ php_installations:
 ```
 
 
-Example Playbook
-----------------
+## Example Playbooks
 
-Example: Install the new relic php agent for single remi php version. 
+#### Install the new relic php agent for single remi php version. 
 ```yaml
 ---
 - hosts: all
@@ -95,7 +109,27 @@ Example: Install the new relic php agent for single remi php version.
     - visdmin.ansible-new-relic-php-agent
 ```
 
-Example: Install the new relic php agent for standard php installation
+
+#### Install the new relic php agent for single remi php version. 
+```yaml
+---
+- hosts: all
+  vars:
+    php_installations:
+      - appname: my application
+        license: awdbk12312ada2wd12312kadwaw2132
+        bin_path: /opt/remi/php74/root/bin/
+        config_path: /etc/opt/remi/php74/php.d/
+        php_fpm_service_name: php74-php-fpm
+        web_server_service_name: nginx
+        ini:
+          framework: symfony2
+  roles:
+    - visdmin.ansible-new-relic-php-agent
+```
+
+
+#### Install the new relic php agent for standard php installation
 ```yaml
 ---
 - hosts: all
@@ -110,7 +144,6 @@ Example: Install the new relic php agent for standard php installation
      - visdmin.ansible-new-relic-php-agent
 ```
 
-License
--------
+## License
 
 MIT
