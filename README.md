@@ -1,7 +1,7 @@
-![Ansible Role](https://img.shields.io/ansible/role/56040?color=orange)
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/visdmin/ansible-new-relic-php-agent)
-![GitHub](https://img.shields.io/github/license/visdmin/ansible-new-relic-php-agent)
-![GitHub last commit](https://img.shields.io/github/last-commit/visdmin/ansible-new-relic-php-agent)
+[![Ansible Role](https://img.shields.io/ansible/role/56040?color=orange)](https://galaxy.ansible.com/visdmin/ansible_new_relic_php_agent)
+[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/visdmin/ansible-new-relic-php-agent)](https://github.com/visdmin/ansible-new-relic-php-agent/releases)
+[![GitHub](https://img.shields.io/github/license/visdmin/ansible-new-relic-php-agent)](https://github.com/visdmin/ansible-new-relic-php-agent/blob/main/LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/visdmin/ansible-new-relic-php-agent)](https://github.com/visdmin/ansible-new-relic-php-agent/commits/main)
 
 
 # ansible-new-relic-php-agent
