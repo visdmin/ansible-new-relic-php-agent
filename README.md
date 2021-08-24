@@ -1,3 +1,9 @@
+![Ansible Role](https://img.shields.io/ansible/role/56040?color=orange)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/visdmin/ansible-new-relic-php-agent)
+![GitHub](https://img.shields.io/github/license/visdmin/ansible-new-relic-php-agent)
+![GitHub last commit](https://img.shields.io/github/last-commit/visdmin/ansible-new-relic-php-agent)
+
+
 # ansible-new-relic-php-agent
 
 
