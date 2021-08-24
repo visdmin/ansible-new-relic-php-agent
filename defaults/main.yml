@@ -1,14 +1,10 @@
 ---
 
-php_agent_package_name: newrelic-php5
-php_agent_service_name: newrelic-daemon
-php_ini_filename: newrelic.ini
+anrpa_new_relic_repo_name: newrelic.repo
+anrpa_new_relic_64bit_repo_url: http://yum.newrelic.com/pub/newrelic/el5/i386/newrelic-repo-5-3.noarch.rpm
+anrpa_new_relic_32bit_repo_url: http://yum.newrelic.com/pub/newrelic/el5/x86_64/newrelic-repo-5-3.noarch.rpm
 
-new_relic_repository:
-  name: newrelic
-  enabled: true
-  desc: New Relic packages for Enterprise Linux 5 - set by ansible
-  baseurl: http://yum.newrelic.com/pub/newrelic/el5/$basearch
-  gpgcheck: true
-  gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-NewRelic
-  repo_gpgcheck: false
+anrpa_php_agent_package_name: newrelic-php5
+anrpa_php_agent_service_name: newrelic-daemon
+
+anrpa_php_ini_filename: newrelic.ini

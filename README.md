@@ -17,16 +17,16 @@ Comments and pull reqeusts are welcome !
 
 ## Role Variables
 
-#### [required] `php_installations:` list of `php` installations:
+#### [required] `anrpa_php_installations:` list of `php` installations:
 ```yaml
-# List of php installations (required)
-php_installations:
+anrpa_state: latests       # latests | present | absent     (required)
+anrpa_php_installations:   # List of php installations      (required)
   # php installation #1
-  - appname: "my app"                         # Aplication name                (required)
-    license: "123123810923789018283"          # New relic license key          (required)
-    bin_path: "/opt/remi/php74/root/bin/"     # Path to the `php` executable   (required)
-    config_path: "/etc/opt/remi/php74/php.d/" # Path to `php` config directory (required)
-  
+  - appname: "my app"                            # Aplication name                (required)
+    license: "123123810923789018283"             # New relic license key          (required)
+    bin_path: "/opt/remi/php74/root/bin/"        # Path to the `php` executable   (required)
+    config_path: "/etc/opt/remi/php74/php.d/"    # Path to `php` config directory (required)
+
   # php installation #2
   - appname: "another app"
     license: "adaw213131321"
@@ -42,6 +42,7 @@ php_installations:
   - `config_path`: direcotry where `php` configuration is located (`php.d/`)
 
 #### Optional fields for `php_installation`:
+  - `state`: [present | absent] can be used to disable php single installation (removes the .ini file for the installation)
   - `php_fpm_service_name`: php-fpm service name to be restarted when php configuration changes are done.
   - `web_server_service_name`: web-server service name to be restarted when php configuration changes are done.
   - `ini`: newrelic.ini configuration variables
@@ -50,10 +51,19 @@ php_installations:
   - **Before overwriting `newrelic.ini` variables in `ini:` section make sure that you understand what you are doing.**
   - **Changing the .ini values could cause security flaws with the installation !**
   - Help with indivial variabled: https://docs.newrelic.com/docs/agents/php-agent/configuration/php-agent-configuration/
- 
+
+#### Other role variables (defaults)
+  - `anrpa_new_relic_repo_name`: new-relic yum repository name
+  - `anrpa_new_relic_64bit_repo_url`: new-relic yum repository url for 64-bit systems
+  - `anrpa_new_relic_32bit_repo_url`: new-relic yum repository url for 32-bit systems
+  - `anrpa_php_agent_package_name`: new-relic php agent package name
+  - `anrpa_php_agent_service_name`: new-relic php agent service name
+  - `anrpa_php_ini_filename`: new-relic php.ini file name
+
 Variable example:
 ```yaml
-php_installations:
+anrpa_state: latest
+anrpa_php_installations:
   - appname: My php 7.4 installation 1
     license: awdbk12312adawd12312kadwaw2132
     bin_path: /opt/remi/php74/root/bin/
@@ -91,12 +101,13 @@ php_installations:
 
 ## Example Playbooks
 
-#### Install the new relic php agent for single remi php version. 
+#### Install the new relic php agent for single remi php version.
 ```yaml
 ---
 - hosts: all
   vars:
-    php_installations:
+    anrpa_state: latest
+    anrpa_php_installations:
       - appname: my application
         license: awdbk12312ada2wd12312kadwaw2132
         bin_path: /opt/remi/php74/root/bin/
@@ -110,12 +121,13 @@ php_installations:
 ```
 
 
-#### Install the new relic php agent for single remi php version. 
+#### Uninstall the new relic php agent and configurations. (`anrpa_state: absent`)
 ```yaml
 ---
 - hosts: all
   vars:
-    php_installations:
+    anrpa_state: absent
+    anrpa_php_installations:
       - appname: my application
         license: awdbk12312ada2wd12312kadwaw2132
         bin_path: /opt/remi/php74/root/bin/
@@ -128,13 +140,38 @@ php_installations:
     - visdmin.ansible-new-relic-php-agent
 ```
 
+#### Install the new relic php agent for two different php versions.
+```yaml
+---
+- hosts: all
+  become: true
+  vars:
+    anrpa_state: latest
+    anrpa_php_installations:
+      - appname: php-7.4
+        license: 123123981awdawd0293129
+        bin_path: /opt/remi/php74/root/bin/
+        config_path: /etc/opt/remi/php74/php.d/
+        php_fpm_service_name: php74-php-fpm
+        web_server_service_name: nginx
+      - appname: php-7.2
+        license: 123123981awdawd0293129
+        bin_path: /opt/remi/php72/root/bin/
+        config_path: /etc/opt/remi/php72/php.d/
+        php_fpm_service_name: php72-php-fpm
+        web_server_service_name: nginx
+  roles:
+    - new_relic
+    - visdmin.ansible-new-relic-php-agent
+```
 
 #### Install the new relic php agent for standard php installation
 ```yaml
 ---
 - hosts: all
   vars:
-    php_installations:
+    anrpa_state: latest
+    anrpa_state.php_installations:
       - appname: my application
         license: awdbk12312adawd3212312kadwaw2132
         bin_path: /usr/bin/

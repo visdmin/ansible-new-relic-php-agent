@@ -7,8 +7,8 @@
     daemon_reload: true
     enabled: true
     name: "{{ item.php_fpm_service_name }}"
-  when: item.php_fpm_service_name|default(false) != false
-  loop: "{{ php_installations }}"
+  when: (item.php_fpm_service_name is defined) and (item.php_fpm_service_name|length != 0)
+  loop: "{{ anrpa_php_installations }}"
 
 - name: restart web-server
   systemd:
@@ -16,20 +16,18 @@
     daemon_reload: true
     enabled: true
     name: "{{ item.web_server_service_name }}"
-  when: item.web_server_service_name|default(false) != false
-  loop: "{{ php_installations }}"
+  when: (item.web_server_service_name is defined) and (item.web_server_service_name|length != 0)
+  loop: "{{ anrpa_php_installations }}"
 
 - name: restart new relic php agent
   systemd:
     state: restarted
     daemon_reload: true
     enabled: true
-    name: "{{ php_agent_service_name }}"
-  when: enable_agent_service|default(true) != false
+    name: "{{ anrpa_php_agent_service_name }}"
 
 - name: stop new relic php agent
   systemd:
     state: stopped
     enabled: false
-    name: "{{ php_agent_service_name }}"
-  when: enable_agent_service|default(true) != true
+    name: "{{ anrpa_php_agent_service_name }}"
