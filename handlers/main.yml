@@ -25,9 +25,3 @@
     daemon_reload: true
     enabled: true
     name: "{{ anrpa_php_agent_service_name }}"
-
-- name: stop new relic php agent
-  systemd:
-    state: stopped
-    enabled: false
-    name: "{{ anrpa_php_agent_service_name }}"

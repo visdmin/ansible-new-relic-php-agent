@@ -12,15 +12,19 @@ Comments and pull reqeusts are welcome !
 ## Requirements
 
 
-- Role currenlty only has support for `Centos 7`.
+- Role currenlty only has support for `CentOS 7`.
 - Working php installation
 
 ## Role Variables
 
+### [required] `anrpa_installation_state`:
+  - `present`: Install new-relic php agent or keep the current version, and configure it.
+  - `latests`: Keep new-relic php agent up to date, and configure it.
+  - `absent`: Uninstall new-relic php agent, repository, and configurations.
+
 #### [required] `anrpa_php_installations:` list of `php` installations:
 ```yaml
-anrpa_state: latests       # latests | present | absent     (required)
-anrpa_php_installations:   # List of php installations      (required)
+anrpa_php_installations:                         # List of php installations      (required)
   # php installation #1
   - appname: "my app"                            # Aplication name                (required)
     license: "123123810923789018283"             # New relic license key          (required)
@@ -62,7 +66,7 @@ anrpa_php_installations:   # List of php installations      (required)
 
 Variable example:
 ```yaml
-anrpa_state: latest
+anrpa_installation_state: latest
 anrpa_php_installations:
   - appname: My php 7.4 installation 1
     license: awdbk12312adawd12312kadwaw2132
@@ -106,7 +110,7 @@ anrpa_php_installations:
 ---
 - hosts: all
   vars:
-    anrpa_state: latest
+    anrpa_installation_state: latest
     anrpa_php_installations:
       - appname: my application
         license: awdbk12312ada2wd12312kadwaw2132
@@ -121,12 +125,12 @@ anrpa_php_installations:
 ```
 
 
-#### Uninstall the new relic php agent and configurations. (`anrpa_state: absent`)
+#### Uninstall the new relic php agent and configurations. (`anrpa_installation_state: absent`)
 ```yaml
 ---
 - hosts: all
   vars:
-    anrpa_state: absent
+    anrpa_installation_state: absent
     anrpa_php_installations:
       - appname: my application
         license: awdbk12312ada2wd12312kadwaw2132
@@ -146,7 +150,7 @@ anrpa_php_installations:
 - hosts: all
   become: true
   vars:
-    anrpa_state: latest
+    anrpa_installation_state: latest
     anrpa_php_installations:
       - appname: php-7.4
         license: 123123981awdawd0293129
@@ -170,8 +174,8 @@ anrpa_php_installations:
 ---
 - hosts: all
   vars:
-    anrpa_state: latest
-    anrpa_state.php_installations:
+    anrpa_installation_state: latest
+    anrpa_installation_state.php_installations:
       - appname: my application
         license: awdbk12312adawd3212312kadwaw2132
         bin_path: /usr/bin/

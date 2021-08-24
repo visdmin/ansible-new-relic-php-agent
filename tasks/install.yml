@@ -35,18 +35,22 @@
 - name: Install new relic php agent package
   yum:
     name: "{{ anrpa_php_agent_package_name }}"
-    state: "{{ anrpa_state|default('latest') }}"
+    state: "{{ anrpa_installation_state|default('latest') }}"
     update_cache: true
   register: php_agent_installed
 
 - name: Run new relic php agent install
-  shell: NR_INSTALL_PATH={{ item.bin_path }}; newrelic-install install
-  loop: "{{ php_installations }}"
+  shell: "newrelic-install install"
+  environment:
+    NR_INSTALL_SILENT: true
+    NR_INSTALL_KEY: "{{ item.license }}"
+    NR_INSTALL_PATH: "{{ item.bin_path }};"
+  loop: "{{ anrpa_php_installations }}"
   when: php_agent_installed.changed
 
 - name: Setup new relic php.ini files
   vars:
-    - config: "{{ item }}"
+    config: "{{ item }}"
   template:
     src: newrelic.php.ini.j2
     dest: "{{ item.config_path }}/{{ anrpa_php_ini_filename }}"

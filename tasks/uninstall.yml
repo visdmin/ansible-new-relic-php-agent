@@ -2,8 +2,8 @@
 
 - name: Check that php installation paths are defined
   fail:
-    msg: "'php_path' has to be defined for each php setup, for help visit: https://github.com/visdmin/ansible-new-relic-php-agent/blob/main/README.md"
-  when: item.php_path | default(False) == False
+    msg: "'config_path' has to be defined for each php setup, for help visit: https://github.com/visdmin/ansible-new-relic-php-agent/blob/main/README.md"
+  when: item.config_path | default(False) == False
   loop: "{{ anrpa_php_installations }}"
 
 - name: Uninstall new relic php.ini files and stop php agent
@@ -14,10 +14,16 @@
   notify:
     - restart php-fpm
     - restart web-server
-    - stop new relic php agent
 
 - name: Run new relic php agent install
   shell: newrelic-install purge
+  ignore_errors: true
+
+- name: Stop and disable new relic php agent
+  systemd:
+    state: stopped
+    enabled: false
+    name: "{{ anrpa_php_agent_service_name }}"
 
 - name: Uninstall new relic php agent package
   yum:
@@ -26,11 +32,11 @@
 
 - name: Check if new relic yum repository is installed
   stat:
-    path: "/etc/yum.repos.d/{{ anrpa_new_relic_repository.name }}"
-    register: newrelic_repository_exists
+    path: "/etc/yum.repos.d/{{ anrpa_new_relic_repo_name }}"
+  register: newrelic_repository_exists
 
 - name: Uninstall new relic yum repository
   yum_repository:
-    name: "{{ anrpa_new_relic_repository.name }}"
+    name: "{{ anrpa_new_relic_repo_name }}"
     state: absent
   when: newrelic_repository_exists
