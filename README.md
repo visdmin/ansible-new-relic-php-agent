@@ -189,7 +189,6 @@ anrpa_php_installations:
         php_fpm_service_name: php72-php-fpm
         web_server_service_name: nginx
   roles:
-    - new_relic
     - visdmin.ansible-new-relic-php-agent
 ```
 
