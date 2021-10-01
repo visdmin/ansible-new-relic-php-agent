@@ -24,13 +24,10 @@
   when: item.config_path | default(False) == False
   loop: "{{ anrpa_php_installations }}"
 
-- name: Install new relic yum 64 bit repository
-  shell: rpm -Uvh {{ anrpa_new_relic_64bit_repo_url }}
-  when: ansible_architecture == "64 bits"
-
-- name: Install new relic yum 32 bit repository
-  shell: rpm -Uvh {{ anrpa_new_relic_32bit_repo_url }}
-  when: ansible_architecture == "32 bits"
+- name: Install new relic php agent repository from rpm
+  yum:
+    name: "{{ anrpa_new_relic_64bit_repo_url }}"
+    state: present
 
 - name: Install new relic php agent package
   yum:

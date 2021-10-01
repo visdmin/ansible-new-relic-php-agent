@@ -1,6 +1,7 @@
 ---
 
 anrpa_new_relic_repo_name: newrelic.repo
+# https://docs.newrelic.com/docs/agents/php-agent/installation/php-agent-installation-aws-linux-redhat-centos/#tell-rpm
 anrpa_new_relic_64bit_repo_url: http://yum.newrelic.com/pub/newrelic/el5/i386/newrelic-repo-5-3.noarch.rpm
 anrpa_new_relic_32bit_repo_url: http://yum.newrelic.com/pub/newrelic/el5/x86_64/newrelic-repo-5-3.noarch.rpm
 
