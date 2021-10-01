@@ -1,3 +1,9 @@
+[![Ansible Role](https://img.shields.io/ansible/role/56040?color=orange)](https://galaxy.ansible.com/visdmin/ansible_new_relic_php_agent)
+[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/visdmin/ansible-new-relic-php-agent)](https://github.com/visdmin/ansible-new-relic-php-agent/releases)
+[![GitHub](https://img.shields.io/github/license/visdmin/ansible-new-relic-php-agent)](https://github.com/visdmin/ansible-new-relic-php-agent/blob/main/LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/visdmin/ansible-new-relic-php-agent)](https://github.com/visdmin/ansible-new-relic-php-agent/commits/main)
+
+
 # ansible-new-relic-php-agent
 
 
@@ -9,11 +15,29 @@ Ansible role for installing new relic php agent on CentOS 7.
 This role is still in early states of development, so issues are very possible.
 Comments and pull reqeusts are welcome !
 
+## Installation
+
+Using `ansible-galaxy`:
+```shell
+ansible-galaxy install visdmin.ansible-new-relic-php-agent
+```
+
+Using `git`:
+```shell
+git clone https://github.com/visdmin/ansible-new-relic-php-agent.git
+```
+
+Using `requirements.yml`:
+```yaml
+- src: visdmin.ansible-new-relic-php-agent
+```
+
 ## Requirements
 
 
 - Role currenlty only has support for `CentOS 7`.
-- Working php installation
+- Working php installation on taget host
+- New relic license key [help here: docs.newrelic.com](https://docs.newrelic.com/docs/apis/intro-apis/new-relic-api-keys/#ingest-license-key)
 
 ## Role Variables
 
@@ -165,7 +189,6 @@ anrpa_php_installations:
         php_fpm_service_name: php72-php-fpm
         web_server_service_name: nginx
   roles:
-    - new_relic
     - visdmin.ansible-new-relic-php-agent
 ```
 
